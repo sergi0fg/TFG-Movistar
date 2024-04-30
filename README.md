@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-# TFG-Movistar
-=======
+
 # TFG-Movistar
 
-!RECOMENDADOR .PY
->>>>>>> 2cc9c1c (ADD Readme)
-# TFG-Movistar
-
-!RECOMENDADOR .PY
+ - Se van a realizar varias funcioanlidades para la https://videotecamovistarplus.es/ :
+     - Un recomendador para los archivos multimedia
+     - Un speed to text, para transcribir la voz de
+       los archivos multimedia a texto.
