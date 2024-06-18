@@ -1,34 +1,31 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, request, render_template, flash
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Necesario para flash messages
+app.secret_key = 'some_secret_key'
 
-# Cargar el JSON con los datos
-try:
-    with open('actores_descripciones.json', 'r', encoding='utf-8') as f:
-        actores_descripciones = json.load(f)
-except FileNotFoundError:
-    actores_descripciones = []
-    print("Error: No se encontró el archivo 'actores_descripciones.json'")
+# Cargar los datos de actores y descripciones
+with open('actores_descripciones.json', 'r') as file:
+    actores_descripciones = json.load(file)
 
-# Vectorizar los textos usando TF-IDF
 def combinar_texto(actores, descripcion, descripcion_secundaria):
     return ' '.join(actores) + ' ' + descripcion + ' ' + descripcion_secundaria
 
+# Preprocesamiento TF-IDF
 textos = [combinar_texto(obj['actores'], obj['descripcion'], obj['descripcion_secundaria']) for obj in actores_descripciones]
-vectorizer = TfidfVectorizer()
+vectorizer = TfidfVectorizer(stop_words='spanish')
 tfidf_matrix = vectorizer.fit_transform(textos)
 
-# Función para recomendar basándose en un actor
 def recomendar_por_actor(actor, actores_descripciones, tfidf_matrix, n_recommendations=5):
     if not actor:
         return []
+
+    actor_lower = actor.lower()
     
-    # Filtrar objetos que contengan el actor especificado (ignorando mayúsculas/minúsculas)
-    objetos_filtrados = [obj for obj in actores_descripciones if any(actor.lower() in a.lower() for a in obj['actores'])]
+    # Filtrar objetos que contengan exactamente el actor especificado (ignorando mayúsculas/minúsculas)
+    objetos_filtrados = [obj for obj in actores_descripciones if any(actor_lower in a.lower() for a in obj['actores'])]
     
     # Si no hay coincidencias, retornar una lista vacía
     if not objetos_filtrados:
@@ -53,15 +50,17 @@ def recomendar_por_actor(actor, actores_descripciones, tfidf_matrix, n_recommend
 @app.route('/', methods=['GET', 'POST'])
 def index():
     recomendaciones = []
+    messages = []
     if request.method == 'POST':
-        actor = request.form['actor'].strip()
-        if not actor:
-            flash('Por favor, introduce el nombre de un actor.', 'error')
-        else:
+        actor = request.form['actor']
+        if actor:
             recomendaciones = recomendar_por_actor(actor, actores_descripciones, tfidf_matrix)
             if not recomendaciones:
-                flash(f'No se encontraron recomendaciones para el actor: {actor}', 'info')
-    return render_template('index.html', recomendaciones=recomendaciones)
+                messages.append(('error', 'No se encontraron recomendaciones para el actor especificado.'))
+        else:
+            messages.append(('error', 'Por favor, ingrese un nombre de actor.'))
+    
+    return render_template('index.html', recomendaciones=recomendaciones, messages=messages)
 
 if __name__ == '__main__':
     app.run(debug=True)

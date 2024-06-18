@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recomendador de Actores</title>
+</head>
+<body>
+    <h1>Recomendador de Actores</h1>
+    <form method="POST" action="/">
+        <label for="actor">Nombre del Actor:</label>
+        <input type="text" id="actor" name="actor">
+        <button type="submit">Buscar</button>
+    </form>
+    
+    <ul>
+        {% for category, message in messages %}
+        <li style="color: {% if category == 'error' %}'red'{% elif category == 'info' %}'blue'{% endif %};">{{ message|safe }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Recomendaciones:</h2>
+    <ul>
+        {% for rec in recomendaciones %}
+        <li>
+            <strong>Actores:</strong> {{ rec['actores']|join(', ') }}<br>
+            <strong>Descripción:</strong> {{ rec['descripcion'] }}<br>
+            <strong>Descripción Secundaria:</strong> {{ rec['descripcion_secundaria'] }}<br>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
