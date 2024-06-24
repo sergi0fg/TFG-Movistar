@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Recomendador de Actores</title>
+    <style>
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
 </head>
 <body>
     <h1>Recomendador de Actores</h1>
@@ -14,7 +18,7 @@
     
     <ul>
         {% for category, message in messages %}
-        <li style="color: {% if category == 'error' %}'red'{% elif category == 'info' %}'blue'{% endif %};">{{ message|safe }}</li>
+        <li class="{{ 'error' if category == 'error' else 'info' }}">{{ message|safe }}</li>
         {% endfor %}
     </ul>
     
