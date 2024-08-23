@@ -1,63 +1,83 @@
-from moviepy.editor import VideoFileClip
+import json
+import os
 import speech_recognition as sr
+from moviepy.editor import VideoFileClip
+from pydub import AudioSegment
+from pydub.silence import split_on_silence
 
-def extract_audio(video_path, audio_output_path):
-    """
-    Extrae el audio de un archivo de video y lo guarda como un archivo WAV.
-    
-    :param video_path: Ruta al archivo de video.
-    :param audio_output_path: Ruta donde se guardará el archivo de audio.
-    """
-    # Cargar el video
+# Definir los caminos de los archivos
+video_path = 'static/videos/video.mp4'
+audio_path = 'static/transcriptions/audio.wav'
+json_path = 'static/transcriptions/transcription.json'
+
+# Extraer audio del video
+def extract_audio(video_path, audio_path):
     video = VideoFileClip(video_path)
-    
-    # Extraer y guardar el audio
-    video.audio.write_audiofile(audio_output_path)
-    print(f'Audio extraído y guardado en {audio_output_path}')
+    audio = video.audio
+    audio.write_audiofile(audio_path, codec='pcm_s16le')
 
-def transcribe_audio_to_text(audio_path):
-    """
-    Transcribe el audio de un archivo a texto utilizando SpeechRecognition y la API de Google.
+# Dividir el audio en segmentos donde se detecta voz
+def split_audio_on_speech(audio_path):
+    audio = AudioSegment.from_wav(audio_path)
     
-    :param audio_path: Ruta al archivo de audio.
-    :return: Transcripción del audio en forma de texto.
-    """
-    # Crear un reconocedor de voz
+    # Dividir el audio en segmentos basados en silencio
+    chunks = split_on_silence(
+        audio,
+        min_silence_len=500,  # Ajusta según sea necesario
+        silence_thresh=audio.dBFS - 14,  # Ajustar para ser más o menos sensible
+        keep_silence=300
+    )
+    
+    return chunks
+
+# Transcribir cada segmento de audio
+def transcribe_audio(chunks):
     recognizer = sr.Recognizer()
+    transcript = []
+    
+    for i, chunk in enumerate(chunks):
+        chunk.export("temp_chunk.wav", format="wav")
+        
+        with sr.AudioFile("temp_chunk.wav") as source:
+            audio_segment = recognizer.record(source)
+            
+            try:
+                # Reconocer el audio
+                text = recognizer.recognize_google(audio_segment, language='es-ES')
+                transcript.append({
+                    'startTime': i * 10,  # Aproximado
+                    'endTime': (i + 1) * 10,  # Aproximado
+                    'text': text
+                })
+            except sr.UnknownValueError:
+                transcript.append({
+                    'startTime': i * 10,
+                    'endTime': (i + 1) * 10,
+                    'text': "[Sin reconocimiento]"
+                })
+            except sr.RequestError as e:
+                transcript.append({
+                    'startTime': i * 10,
+                    'endTime': (i + 1) * 10,
+                    'text': f"[Error: {e}]"
+                })
+    
+    return transcript
 
-    # Leer el archivo de audio
-    with sr.AudioFile(audio_path) as source:
-        audio = recognizer.record(source)
-    
-    # Usar el reconocedor para convertir el audio a texto
-    try:
-        text = recognizer.recognize_google(audio, language="es-ES")
-        print("Transcripción completa.")
-        return text
-    except sr.UnknownValueError:
-        print("Google Speech Recognition no pudo entender el audio.")
-        return ""
-    except sr.RequestError as e:
-        print(f"No se pudo solicitar el servicio de Google Speech Recognition; {e}")
-        return ""
+# Asegurarse de que el directorio de transcripciones exista
+os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
-def main():
-    # Definir las rutas de los archivos
-    video_path = 'static/videos/video.mp4'
-    audio_output_path = 'static/videos/video_audio.wav'
-    transcription_file_path = 'static/transcriptions/transcription.txt'
-    
-    # Extraer el audio del video
-    extract_audio(video_path, audio_output_path)
-    
-    # Transcribir el audio a texto
-    transcription_text = transcribe_audio_to_text(audio_output_path)
-    
-    # Guardar la transcripción en un archivo de texto
-    with open(transcription_file_path, 'w') as file:
-        file.write(transcription_text)
-    
-    print(f'Transcripción guardada en {transcription_file_path}')
+# Extraer el audio del video
+extract_audio(video_path, audio_path)
 
-if __name__ == "__main__":
-    main()
+# Dividir el audio basado en detección de voz
+chunks = split_audio_on_speech(audio_path)
+
+# Transcribir el audio
+transcription = transcribe_audio(chunks)
+
+# Guardar la transcripción en un archivo JSON
+with open(json_path, 'w') as json_file:
+    json.dump(transcription, json_file, indent=4, ensure_ascii=False)
+
+print(f"Transcripción guardada en {json_path}")

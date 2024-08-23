@@ -34,34 +34,64 @@
         {% if selected_movie_id %}
             <div class="video-section">
                 <h2>Video</h2>
-                <video controls width="600">
+                <video id="video" controls width="600">
                     <source src="{{ url_for('static', filename='videos/video.mp4') }}" type="video/mp4">
                     Tu navegador no soporta la reproducción de videos.
                 </video>
 
                 <button id="toggle-transcription">Mostrar Transcripción</button>
 
-                {% if transcription %}
-                    <div id="transcription" style="display:none;">
-                        <h3>Transcripción</h3>
-                        <p>{{ transcription }}</p>
-                    </div>
-                {% endif %}
+                <div id="transcription" style="display:none;">
+                    <h3>Transcripción</h3>
+                    <p id="transcription-text"></p>
+                </div>
             </div>
         {% endif %}
     </div>
 
     <script>
+        let transcriptionData = [];
+        let transcriptionDiv = document.getElementById('transcription');
+        let transcriptionText = document.getElementById('transcription-text');
+        let video = document.getElementById('video');
+
         document.getElementById('toggle-transcription').addEventListener('click', function() {
-            var transcriptionDiv = document.getElementById('transcription');
             if (transcriptionDiv.style.display === 'none') {
                 transcriptionDiv.style.display = 'block';
                 this.textContent = 'Ocultar Transcripción';
+
+                // Fetch the transcription from the server if not already loaded
+                if (transcriptionData.length === 0) {
+                    fetch('/transcription')
+                        .then(response => response.json())
+                        .then(data => {
+                            transcriptionData = data;
+                            updateTranscription(video.currentTime);
+                        });
+                }
             } else {
                 transcriptionDiv.style.display = 'none';
                 this.textContent = 'Mostrar Transcripción';
             }
         });
+
+        video.addEventListener('timeupdate', () => {
+            updateTranscription(video.currentTime);
+        });
+
+        function updateTranscription(currentTime) {
+            // Clear current transcription text
+            transcriptionText.innerHTML = '';
+
+            // Find the segment corresponding to the current video time
+            const currentSegment = transcriptionData.find(segment => 
+                currentTime >= segment.startTime && currentTime < segment.endTime
+            );
+
+            if (currentSegment) {
+                transcriptionText.textContent = `${currentSegment.text}`;
+            }
+        }
     </script>
 </body>
 </html>
