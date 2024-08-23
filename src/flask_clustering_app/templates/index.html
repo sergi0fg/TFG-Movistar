@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendador de Películas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Recomendador de Películas</h1>
+
+        <form method="POST" action="/recommend">
+            <label for="movie_id">Selecciona una película:</label>
+            <select name="movie_id" id="movie_id">
+                {% for movie_id, movie_title in movie_options %}
+                    <option value="{{ movie_id }}" {% if movie_id|string == selected_movie_id %}selected{% endif %}>
+                        {{ movie_title }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Obtener recomendaciones</button>
+        </form>
+
+        {% if recommendations %}
+            <h2>Top 10 Películas Similares:</h2>
+            <ul>
+                {% for movie in recommendations %}
+                    <li>{{ movie.MovieID }} - {{ movie.spanishTitle }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if selected_movie_id %}
+            <div class="video-section">
+                <h2>Video</h2>
+                <video controls width="600">
+                    <source src="{{ url_for('static', filename='videos/video.mp4') }}" type="video/mp4">
+                    Tu navegador no soporta la reproducción de videos.
+                </video>
+
+                <button id="toggle-transcription">Mostrar Transcripción</button>
+
+                {% if transcription %}
+                    <div id="transcription" style="display:none;">
+                        <h3>Transcripción</h3>
+                        <p>{{ transcription }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('toggle-transcription').addEventListener('click', function() {
+            var transcriptionDiv = document.getElementById('transcription');
+            if (transcriptionDiv.style.display === 'none') {
+                transcriptionDiv.style.display = 'block';
+                this.textContent = 'Ocultar Transcripción';
+            } else {
+                transcriptionDiv.style.display = 'none';
+                this.textContent = 'Mostrar Transcripción';
+            }
+        });
+    </script>
+</body>
+</html>

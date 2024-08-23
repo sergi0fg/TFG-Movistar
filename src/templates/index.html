@@ -1,36 +1,83 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Recomendador de Actores</title>
-    <style>
-        .error { color: red; }
-        .info { color: blue; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendador de Películas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>Recomendador de Actores</h1>
-    <form method="POST" action="/">
-        <label for="actor">Nombre del Actor:</label>
-        <input type="text" id="actor" name="actor">
-        <button type="submit">Buscar</button>
-    </form>
-    
-    <ul>
-        {% for category, message in messages %}
-        <li class="{{ 'error' if category == 'error' else 'info' }}">{{ message|safe }}</li>
-        {% endfor %}
-    </ul>
-    
-    <h2>Recomendaciones:</h2>
-    <ul>
-        {% for rec in recomendaciones %}
-        <li>
-            <strong>Actores:</strong> {{ rec['actores']|join(', ') }}<br>
-            <strong>Descripción:</strong> {{ rec['descripcion'] }}<br>
-            <strong>Descripción Secundaria:</strong> {{ rec['descripcion_secundaria'] }}<br>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Recomendador de Películas</h1>
+
+        <form method="POST" action="/recommend">
+            <label for="movie_id">Selecciona una película:</label>
+            <select name="movie_id" id="movie_id">
+                {% for movie_id, movie_title in movie_options %}
+                    <option value="{{ movie_id }}" {% if movie_id|string == selected_movie_id %}selected{% endif %}>
+                        {{ movie_title }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Obtener recomendaciones</button>
+        </form>
+
+        {% if recommendations %}
+            <h2>Top 10 Películas Similares:</h2>
+            <ul>
+                {% for movie in recommendations %}
+                    <li>{{ movie.MovieID }} - {{ movie.spanishTitle }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if selected_movie_id %}
+            <div class="video-section">
+                <h2>Video</h2>
+                <video controls width="600">
+                    <source src="{{ url_for('static', filename='videos/video.mp4') }}" type="video/mp4">
+                    Tu navegador no soporta la reproducción de videos.
+                </video>
+
+                <button id="toggle-transcription">Mostrar Transcripción</button>
+
+                <div id="transcription-container" style="display:none;">
+                    <h3>Transcripción en Tiempo Real</h3>
+                    <div id="transcription-box"></div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Conectar con Socket.IO para recibir la transcripción en tiempo real
+        const socket = io();
+
+        // Confirmar la conexión del cliente
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        // Recibir fragmentos de la transcripción desde el servidor
+        socket.on('transcription_fragment', function(data) {
+            const transcriptionBox = document.getElementById('transcription-box');
+            transcriptionBox.innerHTML += '<p>' + data.fragment + '</p>';
+            console.log('Received fragment:', data.fragment);
+        });
+
+        // Mostrar/ocultar transcripción
+        document.getElementById('toggle-transcription').addEventListener('click', function() {
+            var transcriptionDiv = document.getElementById('transcription-container');
+            if (transcriptionDiv.style.display === 'none') {
+                transcriptionDiv.style.display = 'block';
+                this.textContent = 'Ocultar Transcripción';
+            } else {
+                transcriptionDiv.style.display = 'none';
+                this.textContent = 'Mostrar Transcripción';
+            }
+        });
+    </script>
 </body>
 </html>
+
