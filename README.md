@@ -2,7 +2,7 @@
 # TFG-Movistar
 
 # INTRODUCCIÓN
-Este proyecto del desarrollo experimental para la integración de herramientas de inteligencia artificial que pueda mejorar la interfaz y la base de datos de la Videoteca de Movistar+, https://videotecamovistarplus.es/.
+Este proyecto se basa en el desarrollo experimental para la integración de herramientas de inteligencia artificial que pueda mejorar la interfaz y la base de datos de la Videoteca de Movistar+, https://videotecamovistarplus.es/.
 
 La plataforma de Movistar+ proporciona una variedad de contenido de películas o series, pero no incluye sistemas de recomendación del contenido o de transcripción de audio a texto. A partir de una demanda creciente de soluciones personalizadas se identificó una oportunidad de mejora en cuanto a la experiencia de usuario.
 Para mejorar la experiencia de usuario, se ha identificado una necesidad de añadir funcionalidades que mejoren la personalización del contenido y así como otras funcionalidades que puedan servir de ayuda al usuario a 
