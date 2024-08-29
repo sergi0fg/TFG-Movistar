@@ -12,7 +12,8 @@ Inteligencia Artificial.
 
 
 # DESARROLLO E IMPLEMENTACIÓN
-▪	Análisis Exploratorio de los Datos: Inicia el desarrollo con un análisis exploratorio para comprender mejor los datos disponibles.
+
+## Análisis Exploratorio de los Datos: Inicia el desarrollo con un análisis exploratorio para comprender mejor los datos disponibles.
 
 ▪	Selección del Modelo de Clustering: Se elige el algoritmo de clustering más adecuado basado en los resultados del análisis exploratorio. K-Means con 6 clústeres.
 
