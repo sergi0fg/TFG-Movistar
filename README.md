@@ -25,16 +25,14 @@ Inteligencia Artificial.
 
   - Se integra el sistema de recomendación, coincidiendo con el final de la selección del modelo de clustering.
 
-  ![Captura de Pantalla 2024-08-29 a las 9 29 06](https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78)
 
  <div align="center">
-  <img src="https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78" alt="Captura de Pantalla 2024-08-29 a las 9 29 06" width="800">
+  <img src="https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78" alt="Index" width="800">
 </div>
 
  <div align="center">
-  <img src="https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1" alt="Captura de Pantalla 2024-08-29 a las 9 29 52" width="800">
+  <img src="https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1" alt="top10" width="800">
 </div>
-  ![Captura de Pantalla 2024-08-29 a las 9 29 52](https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1)
   
   
 **Selección del Modelo de Speech to Text:**  
@@ -49,10 +47,6 @@ Inteligencia Artificial.
   <img src="https://github.com/user-attachments/assets/232c41c8-bcbc-4081-b77c-f13211b94b00" alt="trasncrip2" width="800">
 </div>
     
-  ![Captura de Pantalla 2024-08-29 a las 9 30 50](https://github.com/user-attachments/assets/6d7ccc1c-0f0b-47e3-871e-31edb5c6dfec)
-
-  ![Captura de Pantalla 2024-08-29 a las 9 31 09](https://github.com/user-attachments/assets/232c41c8-bcbc-4081-b77c-f13211b94b00)
-  
 
 **Implementación de la Interfaz Web:** 
   - Se desarrolla la interfaz web para integrar todas las funcionalidades del sistema.
