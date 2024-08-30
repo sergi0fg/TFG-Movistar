@@ -26,6 +26,10 @@ Inteligencia Artificial.
   - Se integra el sistema de recomendación, coincidiendo con el final de la selección del modelo de clustering.
 
   ![Captura de Pantalla 2024-08-29 a las 9 29 06](https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78)
+
+  <div align="center">
+  <img src="https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78" alt="Captura de Pantalla 2024-08-29 a las 9 29 06" width="400">
+</div>
   
 
   ![Captura de Pantalla 2024-08-29 a las 9 29 52](https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1)
