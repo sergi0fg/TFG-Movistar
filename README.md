@@ -29,12 +29,12 @@ Inteligencia Artificial.
  <div align="center">
   <img src="https://github.com/user-attachments/assets/0952d998-026d-434c-be83-bda4ed006a78" alt="Index" width="800">
 </div>
-
+<br>
  <div align="center">
   <img src="https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1" alt="top10" width="800">
 </div>
   
-  
+  <br>
 **Selección del Modelo de Speech to Text:**  
 
   - Se selecciona y ajusta el modelo de transcripción de voz.
@@ -42,12 +42,12 @@ Inteligencia Artificial.
 <div align="center">
   <img src="https://github.com/user-attachments/assets/6d7ccc1c-0f0b-47e3-871e-31edb5c6dfec" alt="trasncrip" width="800">
 </div>
-
+<br>
 <div align="center">
   <img src="https://github.com/user-attachments/assets/232c41c8-bcbc-4081-b77c-f13211b94b00" alt="trasncrip2" width="800">
 </div>
     
-
+<br>
 **Implementación de la Interfaz Web:** 
   - Se desarrolla la interfaz web para integrar todas las funcionalidades del sistema.
 
