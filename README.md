@@ -34,7 +34,7 @@ Inteligencia Artificial.
   <img src="https://github.com/user-attachments/assets/3c532165-305e-4a74-b66f-bf1a8dedf5c1" alt="top10" width="800">
 </div>
   
-  <br>
+  
 **Selección del Modelo de Speech to Text:**  
 
   - Se selecciona y ajusta el modelo de transcripción de voz.
@@ -47,7 +47,7 @@ Inteligencia Artificial.
   <img src="https://github.com/user-attachments/assets/232c41c8-bcbc-4081-b77c-f13211b94b00" alt="trasncrip2" width="800">
 </div>
     
-<br>
+
 **Implementación de la Interfaz Web:** 
   - Se desarrolla la interfaz web para integrar todas las funcionalidades del sistema.
 
